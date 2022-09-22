@@ -3,6 +3,7 @@
 class Jugador{
 	var antiguedad
 	var cansancio = 50
+	var victorias = 0
 	
 	method puedeJugar() = !self.totalmenteCansado() && self.esTitular()
 	
@@ -16,7 +17,7 @@ class Jugador{
 	}
 	
 	method tomarBebidaEnergizante(){
-		cansancio = 0.max(cansancio -10)
+		cansancio = 0.max(cansancio - 10)
 	}
 	
 	method jugar(){
@@ -72,18 +73,68 @@ const josedeodo = new Jugador(antiguedad = 5)
 class Partida{
 	var participanteRojo
 	var participanteAzul
+	var arbitro = unArbitro
 	
 	method comenzar(){
+		arbitro.darInicio(participanteRojo, participanteAzul)
+	}
+	
+	method ganador() = arbitro.elegirGanador(participanteRojo, participanteAzul)
+	
+	method cambiarArbitro(_arbitro) {
+		arbitro = _arbitro
+	} 
+}
+
+object unArbitro {
+	
+	method darInicio(participanteRojo, participanteAzul) {
 		participanteRojo.jugar()
 		participanteAzul.jugar()
 	}
 	
-	method ganador(){
+	method elegirGanador(participanteRojo, participanteAzul) {
 		if(participanteRojo.habilidad() > participanteAzul.habilidad()){
 			return participanteRojo
 		}else{
 			return participanteAzul
-		}
 	}
 }
+}
+
+// Punto 4
+
+class JugadorAmateur{
+	
+	var cansancio = 0
+	var habilidad
+	var ganas
+	
+	method habilidad() = habilidad
+	
+	method puedeJugar() = self.tieneGanas() && !self.estaCansado() 
+	
+	method tieneGanas() = ganas >= 50
+	method estaCansado() = cansancio >= 10
+	
+	method jugar() {
+		if(!self.puedeJugar()){
+			throw new DomainException(message="El jugador no puede jugar")
+		}
+		habilidad += 10
+		cansancio += 10
+	}
+}
+
+
+// Punto 6
+
+object hierro {
+	
+	method siguienteLiga() = platino
+	
+}
+
+object platino {}
+
 
